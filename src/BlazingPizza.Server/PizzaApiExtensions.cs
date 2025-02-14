@@ -51,6 +51,11 @@ public static class PizzaApiExtensions
 
         // Salads
         app.MapGet("/salads", async (PizzaStoreContext db) => {
+            if (db.Model.FindEntityType(typeof(Salad)) == null)
+            {
+                return Results.NotFound("Salads entity is not configured in the database.");
+            }
+
             var salads = await db.Salads.ToListAsync();
             return Results.Ok(salads);
         });

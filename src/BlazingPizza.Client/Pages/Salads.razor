@@ -2,32 +2,58 @@
 @inject HttpClient Http
 @inject OrderState OrderState
 
-<h3>Ensaladas</h3>
+<div class="content">
 
-@if (salads == null)
-{
-    <p>Cargando...</p>
-}
-else
-{
-    <ul class="salad-cards">
-        @foreach (var salad in salads)
+    <main class="main">
+        <h3>Ensaladas</h3>
+
+        @if (salads == null)
         {
-            <li class="salad-card" @onclick="() => OrderState.AddSalad(salad)">
-                <div class="salad-info">
-                    <span class="title">@salad.Name</span>
-                    <span class="price">@salad.GetFormattedBasePrice()</span>
-                </div>
-            </li>
+            <p>Cargando...</p>
         }
-    </ul>
-}
+        else
+        {
+            <ul class="salad-cards">
+                @foreach (var salad in salads)
+                {
+                    <li @onclick="@(() => OrderState.AddSalad(salad))" style="background-image: url('@salad.ImageUrl')">
+                        <div class="salad-info">
+                            <span class="title">@salad.Name</span>
+                            <p>@salad.Description</p>
+                            <span class="price">@salad.GetFormattedBasePrice()</span>
+                        </div>
+                    </li>
+                }
+            </ul>
+        }
+    </main>
+
+    <aside class="sidebar">
+        <h2>Mi Pedido</h2>
+        <div class="order-contents">
+            <ul>
+                @foreach (var salad in OrderState.Order.Salads)
+                {
+                    <li>@salad.Name - @salad.GetFormattedBasePrice()</li>
+                }
+            </ul>
+        </div>
+    </aside>
+
+</div>
 
 @code {
     private List<Salad>? salads;
 
     protected override async Task OnInitializedAsync()
     {
-        salads = await Http.GetFromJsonAsync<List<Salad>>("salads");
+        try
+        {
+            salads = await Http.GetFromJsonAsync<List<Salad>>("salads");
+        }
+        catch (Exception ex)
+        {
+            Console.Error.WriteLine("Error cargando ensaladas: " + ex.Message);
+        }
     }
 }

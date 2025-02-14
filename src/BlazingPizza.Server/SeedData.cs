@@ -4,6 +4,11 @@ public static class SeedData
 {
     public static void Initialize(PizzaStoreContext db)
     {
+        db.Specials.RemoveRange(db.Specials);
+        db.Toppings.RemoveRange(db.Toppings);
+        db.Salads.RemoveRange(db.Salads);
+        db.SaveChanges();
+
         var toppings = new Topping[]
         {
             new Topping()
@@ -162,8 +167,8 @@ public static class SeedData
             new PizzaSpecial()
             {
                     Id = 6,
-                    Name = "The Brit",
-                    Description = "When in London...",
+                    Name = "El Guiri",
+                    Description = "Estando en Alicante...",
                     BasePrice = 10.25m,
                     ImageUrl = "img/pizzas/brit.jpg",
             },

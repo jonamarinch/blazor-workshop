@@ -4,39 +4,42 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Configurar servicios de la aplicación
 builder.Services.AddControllersWithViews()
     .AddJsonOptions(options => {
         options.JsonSerializerOptions.AddContext<BlazingPizza.OrderContext>();
     });
+
 builder.Services.AddRazorPages();
 
+// Configurar la base de datos SQLite
 builder.Services.AddDbContext<PizzaStoreContext>(options =>
-        options.UseSqlite("Data Source=pizza.db")
-            .UseModel(BlazingPizza.Server.Models.PizzaStoreContextModel.Instance));
+    options.UseSqlite("Data Source=pizza.db"));
 
 builder.Services.AddDefaultIdentity<PizzaStoreUser>(options => options.SignIn.RequireConfirmedAccount = true)
-        .AddEntityFrameworkStores<PizzaStoreContext>();
+    .AddEntityFrameworkStores<PizzaStoreContext>();
 
 builder.Services.AddIdentityServer()
-        .AddApiAuthorization<PizzaStoreUser, PizzaStoreContext>();
+    .AddApiAuthorization<PizzaStoreUser, PizzaStoreContext>();
 
 builder.Services.AddAuthentication()
-        .AddIdentityServerJwt();
+    .AddIdentityServerJwt();
 
 var app = builder.Build();
 
-// Initialize the database
-var scopeFactory = app.Services.GetRequiredService<IServiceScopeFactory>();
-using (var scope = scopeFactory.CreateScope())
+// ✅ Inicialización de la base de datos correctamente
+using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<PizzaStoreContext>();
-    if (db.Database.EnsureCreated())
-    {
-        SeedData.Initialize(db);
-    }
+
+    // Aplica migraciones automáticamente
+    db.Database.Migrate();
+
+    // Poblar la base de datos con datos de prueba
+    SeedData.Initialize(db);
 }
 
-// Configure the HTTP request pipeline.
+// Configuración del pipeline de middleware
 if (app.Environment.IsDevelopment())
 {
     app.UseWebAssemblyDebugging();
@@ -44,7 +47,6 @@ if (app.Environment.IsDevelopment())
 else
 {
     app.UseExceptionHandler("/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
@@ -58,8 +60,8 @@ app.UseAuthentication();
 app.UseIdentityServer();
 app.UseAuthorization();
 
+// Configurar API y páginas
 app.MapPizzaApi();
-
 app.MapRazorPages();
 app.MapControllers();
 app.MapFallbackToFile("index.html");
