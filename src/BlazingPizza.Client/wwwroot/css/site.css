@@ -198,6 +198,35 @@ form {
         line-height: 2rem;
     }
 
+.salad-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 20rem);
+    grid-gap: 2rem;
+    justify-content: center;
+    padding-left: 0;
+}
+
+.salad-card {
+    height: 10rem;
+    position: relative;
+    background-size: cover;
+    border-radius: 0.5rem;
+    list-style-type: none;
+    box-shadow: 0 3px 4px rgba(0,0,0,0.4);
+    transition: 0.1s ease-out;
+}
+
+.salad-info {
+    border-radius: 0.5rem;
+    position: absolute;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    padding: 0.5rem;
+    color: white;
+    text-align: center;
+    width: 100%;
+}
+
 .price::before {
     content: '£';
     font-weight: 300;

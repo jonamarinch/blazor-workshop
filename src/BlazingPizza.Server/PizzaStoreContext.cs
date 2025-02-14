@@ -21,6 +21,8 @@ public class PizzaStoreContext : ApiAuthorizationDbContext<PizzaStoreUser>
 
     public DbSet<Topping> Toppings { get; set; }
 
+    public DbSet<Salad> Salads { get; set; }
+
     public DbSet<NotificationSubscription> NotificationSubscriptions { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

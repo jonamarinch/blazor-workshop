@@ -1,0 +1,33 @@
+﻿@page "/salads"
+@inject HttpClient Http
+@inject OrderState OrderState
+
+<h3>Ensaladas</h3>
+
+@if (salads == null)
+{
+    <p>Cargando...</p>
+}
+else
+{
+    <ul class="salad-cards">
+        @foreach (var salad in salads)
+        {
+            <li class="salad-card" @onclick="() => OrderState.AddSalad(salad)">
+                <div class="salad-info">
+                    <span class="title">@salad.Name</span>
+                    <span class="price">@salad.GetFormattedBasePrice()</span>
+                </div>
+            </li>
+        }
+    </ul>
+}
+
+@code {
+    private List<Salad>? salads;
+
+    protected override async Task OnInitializedAsync()
+    {
+        salads = await Http.GetFromJsonAsync<List<Salad>>("salads");
+    }
+}

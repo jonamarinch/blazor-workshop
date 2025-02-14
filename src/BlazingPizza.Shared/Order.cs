@@ -18,7 +18,9 @@ public class Order
 
     public List<Pizza> Pizzas { get; set; } = new List<Pizza>();
 
-    public decimal GetTotalPrice() => Pizzas.Sum(p => p.GetTotalPrice());
+    public List<Salad> Salads { get; set; } = new List<Salad>();
+
+    public decimal GetTotalPrice() => Pizzas.Sum(p => p.GetTotalPrice()) + Salads.Sum(s => s.BasePrice);
 
     public string GetFormattedTotalPrice() => GetTotalPrice().ToString("0.00");
 }

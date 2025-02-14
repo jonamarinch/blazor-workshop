@@ -49,6 +49,12 @@ public static class PizzaApiExtensions
             return Results.Ok(toppings);
         });
 
+        // Salads
+        app.MapGet("/salads", async (PizzaStoreContext db) => {
+            var salads = await db.Salads.ToListAsync();
+            return Results.Ok(salads);
+        });
+
         return app;
 
     }

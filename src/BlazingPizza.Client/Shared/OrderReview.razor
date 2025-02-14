@@ -16,6 +16,17 @@
     </ul>
 }
 
+@if (Order.Salads?.Count > 0)
+{
+    <h4>Ensaladas</h4>
+    <ul>
+        @foreach (var salad in Order.Salads)
+        {
+            <li>@salad.Name - £@salad.GetFormattedBasePrice()</li>
+        }
+    </ul>
+}
+
 <p>
     <strong>
         Total price:
@@ -23,6 +34,7 @@
     </strong>
 </p>
 
-@code {
+@code 
+{
     [Parameter, EditorRequired] public Order Order { get; set; } = new();
 }

@@ -185,8 +185,37 @@ public static class SeedData
             },
         };
 
+        var salads = new Salad[]
+        {
+            new Salad()
+            {
+                Id = 1,
+                Name = "Ensalada César",
+                Description = "Crujiente lechuga romana con aderezo César, crutones y queso parmesano.",
+                BasePrice = 10.99m,
+                ImageUrl = "img/salads/cesar.jpg",
+            },
+            new Salad()
+            {
+                Id = 2,
+                Name = "Ensalada Mediterránea",
+                Description = "Mezcla de lechugas con tomate cherry, aceitunas negras, queso feta y aderezo de limón.",
+                BasePrice = 11.49m,
+                ImageUrl = "img/salads/mediterranea.jpg",
+            },
+            new Salad()
+            {
+                Id = 3,
+                Name = "Ensalada de Pollo a la Parrilla",
+                Description = "Pollo a la parrilla sobre una cama de espinacas y rúcula, con nueces y aderezo balsámico.",
+                BasePrice = 12.99m,
+                ImageUrl = "img/salads/pollo.jpg",
+            }
+        };
+
         db.Toppings.AddRange(toppings);
         db.Specials.AddRange(specials);
+        db.Salads.AddRange(salads);
         db.SaveChanges();
     }
 }

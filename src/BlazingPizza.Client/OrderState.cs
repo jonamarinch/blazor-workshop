@@ -43,6 +43,17 @@ public class OrderState
         Order.Pizzas.Remove(pizza);
     }
 
+    public void AddSalad(Salad salad)
+    {
+        Order.Salads.Add(salad);
+    }
+
+    public void RemoveSalad(Salad salad)
+    {
+        Order.Salads.Remove(salad);
+    }
+
+
     public void ResetOrder()
     {
         Order = new Order();
