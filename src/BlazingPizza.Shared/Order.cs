@@ -14,7 +14,7 @@ public class Order
     public Address DeliveryAddress { get; set; } = new Address();
 
     // Set by server during POST
-    public LatLong? DeliveryLocation { get; set; }
+    public LatLong? DeliveryLocation { get; set; } = new LatLong(40.4165, -3.70256);
 
     public List<Pizza> Pizzas { get; set; } = new List<Pizza>();
 

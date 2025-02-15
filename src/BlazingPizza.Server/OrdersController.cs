@@ -58,7 +58,7 @@ public class OrdersController : Controller
         try
         {
             order.CreatedTime = DateTime.Now;
-            order.DeliveryLocation = new LatLong(51.5001, -0.1239);
+            order.DeliveryLocation = new LatLong(40.4165, -3.70256);
             order.UserId = PizzaApiExtensions.GetUserId(HttpContext);
 
             _db.Orders.Attach(order);
