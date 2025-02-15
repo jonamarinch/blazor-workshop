@@ -1,0 +1,8 @@
+﻿<div class="alert alert-info" role="alert">
+    @MessageContent
+</div>
+
+@code {
+    [Parameter]
+    public RenderFragment? MessageContent { get; set; }
+}
