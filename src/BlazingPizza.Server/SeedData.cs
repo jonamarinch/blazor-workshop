@@ -243,11 +243,10 @@ public static class SeedData
 
         // Código para añadir registros especificados
 
-        /*
+        
         db.Toppings.AddRange(toppings);
         db.Specials.AddRange(specials);
         db.Salads.AddRange(salads);
         db.SaveChanges();
-        */
     }
 }
