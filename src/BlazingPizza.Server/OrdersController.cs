@@ -55,36 +55,34 @@ public class OrdersController : Controller
     [HttpPost]
     public async Task<ActionResult<int>> PlaceOrder(Order order)
     {
-        order.CreatedTime = DateTime.Now;
-        order.DeliveryLocation = new LatLong(51.5001, -0.1239);
+        try
+        {
+            order.CreatedTime = DateTime.Now;
+            order.DeliveryLocation = new LatLong(51.5001, -0.1239);
             order.UserId = PizzaApiExtensions.GetUserId(HttpContext);
 
-        // Enforce existence of Pizza.SpecialId and Topping.ToppingId
-        // in the database - prevent the submitter from making up
-        // new specials and toppings
-        foreach (var pizza in order.Pizzas)
-        {
-            pizza.SpecialId = pizza.Special?.Id ?? 0;
-            pizza.Special = null;
+            _db.Orders.Attach(order);
+            _db.Entry(order).Collection(o => o.Pizzas).IsModified = true;
+            _db.Entry(order).Collection(o => o.Salads).IsModified = true; // ✅ Añadido
 
-            foreach (var topping in pizza.Toppings)
+            await _db.SaveChangesAsync();
+
+            var subscription = await _db.NotificationSubscriptions
+                .Where(e => e.UserId == PizzaApiExtensions.GetUserId(HttpContext))
+                .SingleOrDefaultAsync();
+
+            if (subscription != null)
             {
-                topping.ToppingId = topping.Topping?.Id ?? 0;
-                topping.Topping = null;
+                _ = TrackAndSendNotificationsAsync(order, subscription);
             }
+
+            return order.OrderId;
         }
-
-        _db.Orders.Attach(order);
-        await _db.SaveChangesAsync();
-
-        // In the background, send push notifications if possible
-        var subscription = await _db.NotificationSubscriptions.Where(e => e.UserId == PizzaApiExtensions.GetUserId(HttpContext)).SingleOrDefaultAsync();
-        if (subscription != null)
+        catch (Exception ex)
         {
-            _ = TrackAndSendNotificationsAsync(order, subscription);
+            Console.WriteLine($"Error al enviar pedido: {ex.Message}");
+            throw;
         }
-
-        return order.OrderId;
     }
 
     private static async Task TrackAndSendNotificationsAsync(Order order, NotificationSubscription subscription)

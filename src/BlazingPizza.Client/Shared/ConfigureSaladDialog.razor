@@ -1,0 +1,97 @@
+﻿@inject HttpClient HttpClient
+
+
+<div class="dialog-title">
+    <h2>@Salad?.Name</h2>
+    @Salad?.Description
+</div>
+<form class="dialog-body">
+    <div>
+        <label>Tamaño:</label>
+        <input type="range" min=7 max=13 step="1" @bind="Salad.Size" @bind:event="oninput" />
+        <span class="size-label">
+            @(Salad.Size)" (€@(Salad.GetFormattedTotalPrice()))
+        </span>
+    </div>
+    <div>
+        <label>Extras:</label>
+        @if (toppings is null)
+        {
+            <select class="custom-select" disabled>
+                <option>(cargando...)</option>
+            </select>
+        }
+        else if (Salad.Toppings.Count >= 6)
+        {
+            <div>(tope alcanzado)</div>
+        }
+        else
+        {
+            <select class="custom-select" @onchange="ToppingSelected">
+                <option value="-1" disabled selected>(select)</option>
+                @for (var i = 0; i < toppings.Count; i++)
+                {
+                    <option value="@i">@toppings[i].Name - (€@(toppings[i].GetFormattedPrice()))</option>
+                }
+            </select>
+        }
+    </div>
+
+    <div class="toppings">
+        @foreach (var topping in Salad.Toppings)
+        {
+            if (topping?.Topping is not null)
+            {
+                <div class="topping">
+                    @topping.Topping.Name
+                    <span class="topping-price">@topping.Topping.GetFormattedPrice()</span>
+                    <button type="button" class="delete-topping" @onclick="@(() => RemoveTopping(topping.Topping))">x</button>
+                </div>
+            }
+        }
+    </div>
+</form>
+
+<div class="dialog-buttons">
+    <button class="btn btn-secondary mr-auto" @onclick="OnCancel">Cancelar</button>
+    <span class="mr-center">
+        Precio: <span class="price">@(Salad.GetFormattedTotalPrice())</span>
+    </span>
+    <button class="btn btn-success ml-auto" @onclick="OnConfirm">Pedir ></button>
+</div>
+
+
+@code {
+    List<Topping>? toppings;
+
+    [Parameter, EditorRequired] public Salad Salad { get; set; } = new();
+    [Parameter, EditorRequired] public EventCallback OnCancel { get; set; }
+    [Parameter, EditorRequired] public EventCallback OnConfirm { get; set; }
+
+    protected async override Task OnInitializedAsync()
+    {
+        toppings = await HttpClient.GetFromJsonAsync<List<Topping>>("toppings") ?? new();
+    }
+
+    void ToppingSelected(ChangeEventArgs e)
+    {
+        if (toppings is null) return;
+        if (int.TryParse((string?)e.Value, out var index) && index >= 0)
+        {
+            AddTopping(toppings[index]);
+        }
+    }
+
+    void AddTopping(Topping topping)
+    {
+        if (Salad.Toppings.Find(pt => pt.Topping == topping) is null)
+        {
+            Salad.Toppings.Add(new ProductTopping() { Topping = topping });
+        }
+    }
+
+    void RemoveTopping(Topping topping)
+    {
+        Salad.Toppings.RemoveAll(pt => pt.Topping == topping);
+    }
+}

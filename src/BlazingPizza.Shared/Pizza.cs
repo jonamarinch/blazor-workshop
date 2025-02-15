@@ -13,6 +13,8 @@ public class Pizza
 
     public int Id { get; set; }
 
+    public String ProductType { get; set; } = "Pizza";
+
     public int OrderId { get; set; }
 
     public PizzaSpecial? Special { get; set; }
@@ -21,7 +23,16 @@ public class Pizza
 
     public int Size { get; set; }
 
-    public List<PizzaTopping> Toppings { get; set; } = new();
+    public List<ProductTopping> Toppings { get; set; } = new();
+
+    /*
+    public Pizza()
+    {
+        foreach (var topping in Toppings)
+        {
+            topping.ProductType = "Pizza";
+        }
+    }*/
 
     public decimal GetBasePrice()
     {

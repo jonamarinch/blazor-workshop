@@ -305,6 +305,7 @@ namespace BlazingPizza.Server.Migrations
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
+                    ProductType = table.Column<string>(type: "TEXT", nullable: false),
                     OrderId = table.Column<int>(type: "INTEGER", nullable: false),
                     SpecialId = table.Column<int>(type: "INTEGER", nullable: false),
                     Size = table.Column<int>(type: "INTEGER", nullable: false)
@@ -332,10 +333,13 @@ namespace BlazingPizza.Server.Migrations
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
+                    ProductType = table.Column<string>(type: "TEXT", nullable: false),
                     Name = table.Column<string>(type: "TEXT", nullable: false),
                     BasePrice = table.Column<decimal>(type: "TEXT", nullable: false),
                     Description = table.Column<string>(type: "TEXT", nullable: false),
                     ImageUrl = table.Column<string>(type: "TEXT", nullable: false),
+                    Size = table.Column<int>(type: "INTEGER", nullable: false),
+                    DefaultSize = table.Column<int>(type: "INTEGER", nullable: false),
                     OrderId = table.Column<int>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
@@ -349,27 +353,34 @@ namespace BlazingPizza.Server.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "PizzaTopping",
+                name: "ProductTopping",
                 columns: table => new
                 {
                     ToppingId = table.Column<int>(type: "INTEGER", nullable: false),
-                    PizzaId = table.Column<int>(type: "INTEGER", nullable: false)
+                    ProductId = table.Column<int>(type: "INTEGER", nullable: false),
+                    ProductType = table.Column<string>(type: "TEXT", nullable: false),
+                    PizzaId = table.Column<int>(type: "INTEGER", nullable: true),
+                    SaladId = table.Column<int>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PizzaTopping", x => new { x.PizzaId, x.ToppingId });
+                    table.PrimaryKey("PK_ProductTopping", x => new { x.ProductId, x.ProductType, x.ToppingId });
                     table.ForeignKey(
-                        name: "FK_PizzaTopping_Pizzas_PizzaId",
+                        name: "FK_ProductTopping_Pizzas_PizzaId",
                         column: x => x.PizzaId,
                         principalTable: "Pizzas",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_PizzaTopping_Toppings_ToppingId",
+                        name: "FK_ProductTopping_Salads_SaladId",
+                        column: x => x.SaladId,
+                        principalTable: "Salads",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_ProductTopping_Toppings_ToppingId",
                         column: x => x.ToppingId,
                         principalTable: "Toppings",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
@@ -461,8 +472,18 @@ namespace BlazingPizza.Server.Migrations
                 column: "SpecialId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_PizzaTopping_ToppingId",
-                table: "PizzaTopping",
+                name: "IX_ProductTopping_PizzaId",
+                table: "ProductTopping",
+                column: "PizzaId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ProductTopping_SaladId",
+                table: "ProductTopping",
+                column: "SaladId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ProductTopping_ToppingId",
+                table: "ProductTopping",
                 column: "ToppingId");
 
             migrationBuilder.CreateIndex(
@@ -502,10 +523,7 @@ namespace BlazingPizza.Server.Migrations
                 name: "PersistedGrants");
 
             migrationBuilder.DropTable(
-                name: "PizzaTopping");
-
-            migrationBuilder.DropTable(
-                name: "Salads");
+                name: "ProductTopping");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
@@ -517,13 +535,16 @@ namespace BlazingPizza.Server.Migrations
                 name: "Pizzas");
 
             migrationBuilder.DropTable(
+                name: "Salads");
+
+            migrationBuilder.DropTable(
                 name: "Toppings");
 
             migrationBuilder.DropTable(
-                name: "Orders");
+                name: "Specials");
 
             migrationBuilder.DropTable(
-                name: "Specials");
+                name: "Orders");
 
             migrationBuilder.DropTable(
                 name: "Addresses");

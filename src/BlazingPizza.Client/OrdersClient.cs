@@ -11,20 +11,30 @@ public class OrdersClient
         this.httpClient = httpClient;
     }
 
-    public async Task<IEnumerable<OrderWithStatus>> GetOrders() =>
-            await httpClient.GetFromJsonAsync("orders", OrderContext.Default.ListOrderWithStatus) ?? new();
+    public async Task<IEnumerable<OrderWithStatus>> GetOrders()
+    {
+        return await httpClient.GetFromJsonAsync("orders", OrderContext.Default.ListOrderWithStatus) ?? new();
+    }
 
-
-    public async Task<OrderWithStatus> GetOrder(int orderId) =>
-            await httpClient.GetFromJsonAsync($"orders/{orderId}", OrderContext.Default.OrderWithStatus) ?? new();
-
+    public async Task<OrderWithStatus> GetOrder(int orderId)
+    {
+        return await httpClient.GetFromJsonAsync($"orders/{orderId}", OrderContext.Default.OrderWithStatus) ?? new();
+    }
 
     public async Task<int> PlaceOrder(Order order)
     {
-        var response = await httpClient.PostAsJsonAsync("orders", order, OrderContext.Default.Order);
-        response.EnsureSuccessStatusCode();
-        var orderId = await response.Content.ReadFromJsonAsync<int>();
-        return orderId;
+        try
+        {
+            var response = await httpClient.PostAsJsonAsync("orders", order, OrderContext.Default.Order);
+            response.EnsureSuccessStatusCode();
+            var orderId = await response.Content.ReadFromJsonAsync<int>();
+            return orderId;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error al enviar pedido: {ex.Message}");
+            throw;
+        }
     }
 
     public async Task SubscribeToNotifications(NotificationSubscription subscription)

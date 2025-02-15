@@ -23,27 +23,31 @@
 </div>
 
 <div class="sidebar">
-    @if (Order.Pizzas.Any())
+    @if (Order.Pizzas.Any() || Order.Salads.Any())
     {
         <div class="order-contents">
-            <h2>Your order</h2>
+            <h2>Tu pedido</h2>
 
             @foreach (var configuredPizza in Order.Pizzas)
             {
                 <ConfiguredPizzaItem Pizza="configuredPizza" OnRemoved="@(() => RemovePizza(configuredPizza))" />
             }
+            @foreach (var configuredSalad in Order.Salads)
+            {
+                <ConfiguredSaladItem Salad="configuredSalad" OnRemoved="@(() => RemoveSalad(configuredSalad))" />
+            }
         </div>
     }
     else
     {
-        <div class="empty-cart">Choose a pizza<br>to get started</div>
+        <div class="empty-cart">Elige algo<br>para comenzar</div>
     }
 
     <div class="order-total @(Order.Pizzas.Any() ? "" : "hidden")">
         Total:
         <span class="total-price">@Order.GetFormattedTotalPrice()</span>
         <a href="checkout" class="@(Order.Pizzas.Count == 0 ? "btn btn-warning disabled" : "btn btn-warning")">
-            Order >
+            Pedir >
         </a>
     </div>
 </div>
@@ -69,6 +73,14 @@
         if (await JS.Confirm($"Remove {configuredPizza.Special?.Name} pizza from the order?"))
         {
             OrderState.RemoveConfiguredPizza(configuredPizza);
+        }
+    }
+
+    async Task RemoveSalad(Salad configuredSalad)
+    {
+        if (await JS.InvokeAsync<bool>("confirm", $"¿Eliminar {configuredSalad.Name} de tu pedido?"))
+        {
+            OrderState.RemoveConfiguredSalad(configuredSalad);
         }
     }
 }

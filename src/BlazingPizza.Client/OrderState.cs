@@ -6,6 +6,8 @@ public class OrderState
 
     public Pizza? ConfiguringPizza { get; private set; }
 
+    public Salad? ConfiguringSalad { get; private set; }
+
     public Order Order { get; private set; } = new Order();
 
     public void ShowConfigurePizzaDialog(PizzaSpecial special)
@@ -15,7 +17,7 @@ public class OrderState
             Special = special,
             SpecialId = special.Id,
             Size = Pizza.DefaultSize,
-            Toppings = new List<PizzaTopping>(),
+            Toppings = new List<ProductTopping>(),
         };
 
         ShowingConfigureDialog = true;
@@ -43,12 +45,39 @@ public class OrderState
         Order.Pizzas.Remove(pizza);
     }
 
-    public void AddSalad(Salad salad)
+    public void ShowConfigureSaladDialog(Salad salad)
     {
-        Order.Salads.Add(salad);
+        ConfiguringSalad = new Salad()
+        {
+            Name = salad.Name,
+            Description = salad.Description,
+            BasePrice = salad.BasePrice,
+            Id = salad.Id,
+            Size = 10,
+            Toppings = new List<ProductTopping>(),
+        };
+
+        ShowingConfigureDialog = true;
     }
 
-    public void RemoveSalad(Salad salad)
+    public void CancelConfigureSaladDialog()
+    {
+        ConfiguringSalad = null;
+        ShowingConfigureDialog = false;
+    }
+
+    public void ConfirmConfigureSaladDialog()
+    {
+        if (ConfiguringSalad is not null)
+        {
+            Order.Salads.Add(ConfiguringSalad);
+            ConfiguringSalad = null;
+        }
+
+        ShowingConfigureDialog = false;
+    }
+
+    public void RemoveConfiguredSalad(Salad salad)
     {
         Order.Salads.Remove(salad);
     }

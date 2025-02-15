@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BlazingPizza.Server.Migrations
 {
     [DbContext(typeof(PizzaStoreContext))]
-    [Migration("20250214190813_AddSaladTable")]
-    partial class AddSaladTable
+    [Migration("20250215155341_AddProductToppings")]
+    partial class AddProductToppings
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -115,6 +115,10 @@ namespace BlazingPizza.Server.Migrations
                     b.Property<int>("OrderId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("ProductType")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.Property<int>("Size")
                         .HasColumnType("INTEGER");
 
@@ -156,19 +160,32 @@ namespace BlazingPizza.Server.Migrations
                     b.ToTable("Specials");
                 });
 
-            modelBuilder.Entity("BlazingPizza.PizzaTopping", b =>
+            modelBuilder.Entity("BlazingPizza.ProductTopping", b =>
                 {
-                    b.Property<int>("PizzaId")
+                    b.Property<int>("ProductId")
                         .HasColumnType("INTEGER");
+
+                    b.Property<string>("ProductType")
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("ToppingId")
                         .HasColumnType("INTEGER");
 
-                    b.HasKey("PizzaId", "ToppingId");
+                    b.Property<int?>("PizzaId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("SaladId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("ProductId", "ProductType", "ToppingId");
+
+                    b.HasIndex("PizzaId");
+
+                    b.HasIndex("SaladId");
 
                     b.HasIndex("ToppingId");
 
-                    b.ToTable("PizzaTopping");
+                    b.ToTable("ProductTopping");
                 });
 
             modelBuilder.Entity("BlazingPizza.Salad", b =>
@@ -179,6 +196,9 @@ namespace BlazingPizza.Server.Migrations
 
                     b.Property<decimal>("BasePrice")
                         .HasColumnType("TEXT");
+
+                    b.Property<int>("DefaultSize")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -195,11 +215,18 @@ namespace BlazingPizza.Server.Migrations
                     b.Property<int?>("OrderId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("ProductType")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Size")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("Id");
 
                     b.HasIndex("OrderId");
 
-                    b.ToTable("Salads", (string)null);
+                    b.ToTable("Salads");
                 });
 
             modelBuilder.Entity("BlazingPizza.Server.PizzaStoreUser", b =>
@@ -606,18 +633,20 @@ namespace BlazingPizza.Server.Migrations
                     b.Navigation("Special");
                 });
 
-            modelBuilder.Entity("BlazingPizza.PizzaTopping", b =>
+            modelBuilder.Entity("BlazingPizza.ProductTopping", b =>
                 {
                     b.HasOne("BlazingPizza.Pizza", null)
                         .WithMany("Toppings")
-                        .HasForeignKey("PizzaId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("PizzaId");
+
+                    b.HasOne("BlazingPizza.Salad", null)
+                        .WithMany("Toppings")
+                        .HasForeignKey("SaladId");
 
                     b.HasOne("BlazingPizza.Topping", "Topping")
                         .WithMany()
                         .HasForeignKey("ToppingId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Topping");
@@ -689,6 +718,11 @@ namespace BlazingPizza.Server.Migrations
                 });
 
             modelBuilder.Entity("BlazingPizza.Pizza", b =>
+                {
+                    b.Navigation("Toppings");
+                });
+
+            modelBuilder.Entity("BlazingPizza.Salad", b =>
                 {
                     b.Navigation("Toppings");
                 });

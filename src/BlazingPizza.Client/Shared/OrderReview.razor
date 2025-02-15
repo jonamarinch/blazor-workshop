@@ -4,7 +4,7 @@
         <strong>
             @(pizza.Size)"
             @pizza.Special?.Name
-            (£@pizza.GetFormattedTotalPrice())
+            (€@pizza.GetFormattedTotalPrice())
         </strong>
     </p>
 
@@ -16,21 +16,28 @@
     </ul>
 }
 
-@if (Order.Salads?.Count > 0)
+@foreach (var salad in Order.Salads)
 {
-    <h4>Ensaladas</h4>
+    <p>
+        <strong>
+            @(salad.Size)"
+            @salad.Name
+            (€@salad.GetFormattedTotalPrice())
+        </strong>
+    </p>
+
     <ul>
-        @foreach (var salad in Order.Salads)
+        @foreach (var topping in salad.Toppings)
         {
-            <li>@salad.Name - £@salad.GetFormattedBasePrice()</li>
+            <li>+ @topping.Topping?.Name</li>
         }
     </ul>
 }
 
 <p>
     <strong>
-        Total price:
-        £@Order.GetFormattedTotalPrice()
+        Precio total:
+        €@Order.GetFormattedTotalPrice()
     </strong>
 </p>
 

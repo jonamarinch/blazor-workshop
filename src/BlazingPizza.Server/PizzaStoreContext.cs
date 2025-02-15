@@ -27,27 +27,11 @@ public class PizzaStoreContext : ApiAuthorizationDbContext<PizzaStoreUser>
     {
         base.OnModelCreating(modelBuilder);
 
-        // Configuración de relación muchos-a-muchos entre Pizza y Toppings
-        modelBuilder.Entity<PizzaTopping>()
-            .HasKey(pst => new { pst.PizzaId, pst.ToppingId });
+        // Configuring a many-to-many special -> topping relationship that is friendly for serialization
+        modelBuilder.Entity<ProductTopping>().HasKey(pst => new { pst.ProductId, pst.ProductType, pst.ToppingId });
+        modelBuilder.Entity<ProductTopping>().HasOne(pst => pst.Topping).WithMany();
 
-        modelBuilder.Entity<PizzaTopping>()
-            .HasOne<Pizza>()
-            .WithMany(ps => ps.Toppings)
-            .HasForeignKey(pst => pst.PizzaId)
-            .OnDelete(DeleteBehavior.Cascade); // Elimina toppings al eliminar una pizza
-
-        modelBuilder.Entity<PizzaTopping>()
-            .HasOne(pst => pst.Topping)
-            .WithMany()
-            .HasForeignKey(pst => pst.ToppingId)
-            .OnDelete(DeleteBehavior.Restrict); // Evita eliminar toppings si están en uso
-
-        // Configuración de propiedad de localización en la orden
-        modelBuilder.Entity<Order>()
-            .OwnsOne(o => o.DeliveryLocation);
-
-        // Configuración opcional para `Salad`
-        modelBuilder.Entity<Salad>().ToTable("Salads");
+        // Inline the Lat-Long pairs in Order rather than having a FK to another table
+        modelBuilder.Entity<Order>().OwnsOne(o => o.DeliveryLocation);
     }
 }

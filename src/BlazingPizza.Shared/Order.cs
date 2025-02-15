@@ -20,9 +20,15 @@ public class Order
 
     public List<Salad> Salads { get; set; } = new List<Salad>();
 
-    public decimal GetTotalPrice() => Pizzas.Sum(p => p.GetTotalPrice()) + Salads.Sum(s => s.BasePrice);
+    public decimal GetTotalPrice()
+    {
+        return Pizzas.Sum(p => p.GetTotalPrice()) + Salads.Sum(s => s.GetTotalPrice());
+    }
 
-    public string GetFormattedTotalPrice() => GetTotalPrice().ToString("0.00");
+    public string GetFormattedTotalPrice()
+    {
+        return GetTotalPrice().ToString("0.00");
+    }
 }
 
 [JsonSourceGenerationOptions(GenerationMode = JsonSourceGenerationMode.Default, PropertyNamingPolicy = JsonKnownNamingPolicy.CamelCase)]
@@ -33,5 +39,7 @@ public class Order
 [JsonSerializable(typeof(List<PizzaSpecial>))]
 [JsonSerializable(typeof(List<Topping>))]
 [JsonSerializable(typeof(Topping))]
+[JsonSerializable(typeof(Salad))]                // ✅ Añadido
+[JsonSerializable(typeof(List<Salad>))]         // ✅ Añadido
 [JsonSerializable(typeof(Dictionary<string, string>))]
 public partial class OrderContext : JsonSerializerContext { }

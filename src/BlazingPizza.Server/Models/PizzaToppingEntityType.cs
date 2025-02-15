@@ -16,21 +16,21 @@ namespace BlazingPizza.Server.Models
         {
             var runtimeEntityType = model.AddEntityType(
                 "BlazingPizza.PizzaTopping",
-                typeof(PizzaTopping),
+                typeof(ProductTopping),
                 baseEntityType);
 
             var pizzaId = runtimeEntityType.AddProperty(
                 "PizzaId",
                 typeof(int),
-                propertyInfo: typeof(PizzaTopping).GetProperty("PizzaId", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-                fieldInfo: typeof(PizzaTopping).GetField("<PizzaId>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                propertyInfo: typeof(ProductTopping).GetProperty("PizzaId", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(ProductTopping).GetField("<PizzaId>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 afterSaveBehavior: PropertySaveBehavior.Throw);
 
             var toppingId = runtimeEntityType.AddProperty(
                 "ToppingId",
                 typeof(int),
-                propertyInfo: typeof(PizzaTopping).GetProperty("ToppingId", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-                fieldInfo: typeof(PizzaTopping).GetField("<ToppingId>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                propertyInfo: typeof(ProductTopping).GetProperty("ToppingId", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(ProductTopping).GetField("<ToppingId>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 afterSaveBehavior: PropertySaveBehavior.Throw);
 
             var key = runtimeEntityType.AddKey(
@@ -54,7 +54,7 @@ namespace BlazingPizza.Server.Models
             var toppings = principalEntityType.AddNavigation("Toppings",
                 runtimeForeignKey,
                 onDependent: false,
-                typeof(List<PizzaTopping>),
+                typeof(List<ProductTopping>),
                 propertyInfo: typeof(Pizza).GetProperty("Toppings", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 fieldInfo: typeof(Pizza).GetField("<Toppings>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
 
@@ -73,8 +73,8 @@ namespace BlazingPizza.Server.Models
                 runtimeForeignKey,
                 onDependent: true,
                 typeof(Topping),
-                propertyInfo: typeof(PizzaTopping).GetProperty("Topping", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-                fieldInfo: typeof(PizzaTopping).GetField("<Topping>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
+                propertyInfo: typeof(ProductTopping).GetProperty("Topping", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(ProductTopping).GetField("<Topping>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
 
             return runtimeForeignKey;
         }

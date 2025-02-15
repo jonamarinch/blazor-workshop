@@ -30,7 +30,7 @@ public class OrderWithStatus
 
         if (DateTime.Now < dispatchTime)
         {
-            statusText = "Preparing";
+            statusText = "En preparación";
             mapMarkers = new List<Marker>
                                 {
                                         ToMapMarker("You", order.DeliveryLocation, showPopup: true)
@@ -38,7 +38,7 @@ public class OrderWithStatus
         }
         else if (DateTime.Now < dispatchTime + DeliveryDuration)
         {
-            statusText = "Out for delivery";
+            statusText = "En reparto";
 
             var startPosition = ComputeStartPosition(order);
             var proportionOfDeliveryCompleted = Math.Min(1, (DateTime.Now - dispatchTime).TotalMilliseconds / DeliveryDuration.TotalMilliseconds);
@@ -51,7 +51,7 @@ public class OrderWithStatus
         }
         else
         {
-            statusText = "Delivered";
+            statusText = "Entregado";
             mapMarkers = new List<Marker>
                                 {
                                         ToMapMarker("Delivery location", order.DeliveryLocation, showPopup: true),
@@ -78,5 +78,7 @@ public class OrderWithStatus
     }
 
     static Marker ToMapMarker(string description, LatLong coords, bool showPopup = false)
-            => new Marker { Description = description, X = coords.Longitude, Y = coords.Latitude, ShowPopup = showPopup };
+    {
+        return new Marker { Description = description, X = coords.Longitude, Y = coords.Latitude, ShowPopup = showPopup };
+    }
 }
