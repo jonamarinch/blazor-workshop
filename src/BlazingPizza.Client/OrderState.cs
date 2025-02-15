@@ -6,6 +6,7 @@ public class OrderState
 
     public Pizza? ConfiguringPizza { get; private set; }
 
+    // Se añade la pizza en estado de configuración
     public Salad? ConfiguringSalad { get; private set; }
 
     public Order Order { get; private set; } = new Order();

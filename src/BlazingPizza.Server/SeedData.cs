@@ -3,18 +3,37 @@
 public static class SeedData
 {
     public static void Initialize(PizzaStoreContext db)
-    {
-        /*
-        db.Specials.RemoveRange(db.Specials);
-        db.Toppings.RemoveRange(db.Toppings);
-        db.Salads.RemoveRange(db.Salads);
-        db.Orders.RemoveRange(db.Orders);
-        db.SaveChanges();
-        */
-        
+    {  
 
         var toppings = new Topping[]
         {
+            // BEBIDAS
+            new Topping()
+            {
+                    Name = "Agua mineral (botella)",
+                    Price = 2.50m,
+            },
+            new Topping()
+            {
+                    Name = "Coca-Cola",
+                    Price = 2.99m,
+            },
+            new Topping()
+            {
+                    Name = "Fanta naranja",
+                    Price = 2.99m,
+            },
+            new Topping()
+            {
+                    Name = "Fanta limón",
+                    Price = 2.99m,
+            },
+            new Topping()
+            {
+                    Name = "Fuze Tea",
+                    Price = 2.99m,
+            },
+            // OTROS 'EXTRAS'
             new Topping()
             {
                     Name = "Queso Extra",
@@ -221,6 +240,8 @@ public static class SeedData
                 ImageUrl = "img/salads/pollo.jpg",
             }
         };
+
+        // Código para añadir registros especificados
 
         /*
         db.Toppings.AddRange(toppings);

@@ -6,6 +6,7 @@
             @Pizza.Special?.Description
         </div>
         <form class="dialog-body">
+            <!-- Datos generales de la pizza -->
             <div>
                 <label>Tamaño:</label>
                 <input type="range" min="@Pizza.MinimumSize" max="@Pizza.MaximumSize" step="1" @bind="Pizza.Size" @bind:event="oninput" />
@@ -13,6 +14,7 @@
                     @(Pizza.Size)" (£@(Pizza.GetFormattedTotalPrice()))
                 </span>
             </div>
+            <!-- Listado de toppings -->
             <div>
                 <label>Extras:</label>
                 @if (toppings is null)
@@ -36,7 +38,7 @@
                     </select>
                 }
             </div>
-
+            <!-- Etiquetas de los toppings añadidos -->
             <div class="toppings">
                 @foreach (var topping in Pizza.Toppings)
                 {
@@ -51,7 +53,7 @@
                 }
             </div>
         </form>
-
+        <!-- Botones -->
         <div class="dialog-buttons">
             <button class="btn btn-secondary mr-auto" @onclick="OnCancel">Cancelar</button>
             <span class="mr-center">

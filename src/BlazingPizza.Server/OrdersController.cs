@@ -57,7 +57,9 @@ public class OrdersController : Controller
     {
         try
         {
+            // Momento de creación del pedido
             order.CreatedTime = DateTime.Now;
+            // Localización fija: Madrid, Puerta del Sol
             order.DeliveryLocation = new LatLong(40.4165, -3.70256);
             order.UserId = PizzaApiExtensions.GetUserId(HttpContext);
 

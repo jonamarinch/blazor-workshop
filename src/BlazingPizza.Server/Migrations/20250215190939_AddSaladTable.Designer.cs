@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BlazingPizza.Server.Migrations
 {
     [DbContext(typeof(PizzaStoreContext))]
-    [Migration("20250215155334_AddSaladTable")]
+    [Migration("20250215190939_AddSaladTable")]
     partial class AddSaladTable
     {
         /// <inheritdoc />

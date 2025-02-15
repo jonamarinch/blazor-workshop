@@ -4,14 +4,19 @@
 @inject NavigationManager NavigationManager
 @inject IJSRuntime JS
 
+<!-- Div principal -->
 <div class="main">
     <ul class="salad-cards">
         @if (salads is not null)
         {
+            <!-- Se van recorriendo las ensaladas y se van añadiendo al listado-->
             @foreach (var salad in salads)
             {
+                <!-- Al hacer click se abre el diálogo para configurar la ensalada -->
                 <li @onclick="@(() => OrderState.ShowConfigureSaladDialog(salad))" style="background-image: url('@salad.ImageUrl')">
+                    <!-- Se usa el estilo 'salad-info -->
                     <div class="salad-info">
+                        <!-- Se muestran nombre, descripción y precio -->
                         <span class="title">@salad.Name</span>
                         @salad.Description
                         <span class="price">@salad.GetFormattedTotalPrice()</span>
@@ -22,16 +27,19 @@
     </ul>
 </div>
 
+<!-- Div de la barra lateral de los pedidos -->
 <div class="sidebar">
     @if (Order.Salads.Any() || Order.Pizzas.Any())
     {
         <div class="order-contents">
             <h2>Tu pedido</h2>
 
+            <!-- Se recorren las ensaladas -->
             @foreach (var configuredSalad in Order.Salads)
             {
                 <ConfiguredSaladItem Salad="configuredSalad" OnRemoved="@(() => RemoveSalad(configuredSalad))" />
             }
+            <!-- Se recorren las pizzas -->
             @foreach (var configuredPizza in Order.Pizzas)
             {
                 <ConfiguredPizzaItem Pizza="configuredPizza" OnRemoved="@(() => RemovePizza(configuredPizza))" />

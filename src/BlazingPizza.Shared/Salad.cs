@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace BlazingPizza;
 
+// Clase para la ensalada
 public class Salad
 {
     public int Id { get; set; }
@@ -26,11 +27,13 @@ public class Salad
         }
     }
 
+    // El precio base toma en cuenta el tamaño seleccionado
     public decimal GetBasePrice()
     {
         return ((decimal)Size / (decimal)DefaultSize) * BasePrice;
     }
 
+    // El precio total toma en cuenta además los extras
     public decimal GetTotalPrice()
     {
         if (Toppings.Any(t => t.Topping is null)) throw new NullReferenceException($"{nameof(Toppings)} contained null when calculating the Total Price.");

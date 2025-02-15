@@ -1,0 +1,123 @@
+﻿/* --- daltonico.css: Ajustes para Modo Daltonismo (Complementario) --- */
+
+/* Colores accesibles */
+:root {
+    --daltonico-background-color: #f5f7fa;
+    --daltonico-text-color: #2c3e50;
+    --daltonico-primary-color: #2d7f5e;
+    --daltonico-secondary-color: #f2a65a;
+    --daltonico-header-background: #2d7f5e;
+    --daltonico-highlight-color: #f4d35e;
+    --daltonico-price-color: #0a9396;
+}
+
+/* Ajuste del fondo y texto global */
+body, html {
+    background-color: var(--daltonico-background-color) !important;
+    color: var(--daltonico-text-color) !important;
+}
+
+/* Barras superiores */
+.top-bar {
+    background-color: var(--daltonico-header-background) !important;
+    color: white !important;
+}
+
+/* Texto de usuario e info */
+.user-info .username,
+.user-info a,
+.user-info button.sign-out {
+    color: var(--daltonico-highlight-color) !important;
+}
+
+/* Navegación */
+.nav-tab {
+    background-color: rgba(45, 127, 94, 0.8) !important;
+    color: white !important;
+}
+
+    .nav-tab.active {
+        background-color: var(--daltonico-primary-color) !important;
+        color: var(--daltonico-highlight-color) !important;
+    }
+
+/* Cartas de productos */
+.pizza-info,
+.salad-info {
+    background: linear-gradient(rgba(0, 0, 0, 0.6) 30%, rgba(0, 0, 0, 0) 80%) !important;
+    color: var(--daltonico-highlight-color) !important;
+}
+
+    /* Precios */
+    .pizza-info .price,
+    .salad-info .price {
+        background-color: var(--daltonico-price-color) !important;
+        color: white !important;
+    }
+
+/* Botones */
+button, .btn {
+    background-color: var(--daltonico-secondary-color) !important;
+    color: white !important;
+    border-radius: 5px !important;
+    transition: 0.3s ease-out;
+}
+
+    button:hover, .btn:hover {
+        background-color: #e39640 !important;
+    }
+
+/* Pedidos */
+.order-total {
+    background-color: var(--daltonico-primary-color) !important;
+    color: white !important;
+}
+
+.order-contents h2 {
+    color: var(--daltonico-highlight-color) !important;
+}
+
+/* Diálogos */
+.dialog-title {
+    background-color: var(--daltonico-primary-color) !important;
+    color: var(--daltonico-highlight-color) !important;
+}
+
+.dialog-buttons {
+    background-color: var(--daltonico-background-color) !important;
+}
+
+/* Enlaces */
+a {
+    color: var(--daltonico-primary-color) !important;
+}
+
+    a:hover {
+        color: var(--daltonico-secondary-color) !important;
+        text-decoration: underline;
+    }
+
+/* Mensajes de error */
+.validation-message {
+    color: #e63946 !important;
+}
+
+#blazor-error-ui {
+    background-color: #ffe66d !important;
+    color: #2c3e50 !important;
+}
+
+/* Contenido vacío */
+.empty-cart {
+    color: #8a8a8a !important;
+}
+
+/* Ajustes generales de contraste */
+input[type="range"]::-webkit-slider-thumb {
+    background-color: var(--daltonico-primary-color) !important;
+}
+
+/* Loading Bar */
+.loading-bar::after {
+    background-color: var(--daltonico-secondary-color) !important;
+}

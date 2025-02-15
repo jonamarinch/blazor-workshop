@@ -4,6 +4,8 @@ public class Address
 {
     public int Id { get; set; }
 
+    // Algunos campos son requeridos
+
     [Required, MaxLength(100)]
     public string Name { get; set; } = string.Empty;
 

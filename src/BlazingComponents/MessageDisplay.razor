@@ -1,8 +1,25 @@
-﻿<div class="alert alert-info" role="alert">
+﻿@inject IJSRuntime JSRuntime
+
+<!-- Mensaje recibido -->
+<div class="alert alert-info" role="alert">
     @MessageContent
 </div>
+
+<!-- Botón para el cambio de tema -->
+<button @onclick="ToggleColorBlindMode" class="btn btn-secondary">
+    @(isColorBlindMode ? "Desactivar Modo Daltonismo" : "Activar Modo Daltonismo")
+</button>
 
 @code {
     [Parameter]
     public RenderFragment? MessageContent { get; set; }
+
+    private bool isColorBlindMode = false;
+
+    private async Task ToggleColorBlindMode()
+    {
+        isColorBlindMode = !isColorBlindMode;
+        var theme = isColorBlindMode ? "daltonico" : "normal";
+        await JSRuntime.InvokeVoidAsync("switchTheme", theme);
+    }
 }

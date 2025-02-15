@@ -1,16 +1,21 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <base href="/" />
     <link rel="icon" href="img/icon-512.png" />
+
     <link href="css/bootstrap/bootstrap.min.css" rel="stylesheet" />
-    <link href="css/site.css" rel="stylesheet" />
+    <link href="/css/site.css" rel="stylesheet" />
+    <link id="daltonico-stylesheet" rel="stylesheet" href="/css/daltonismo.css" disabled>
+
     <link href="_content/BlazingPizza.ComponentsLibrary/leaflet/leaflet.css" rel="stylesheet" />
     <link rel="manifest" href="manifest.json" />
     <title>Blazing Pizza</title>
 </head>
+
 <body>
     <div id="app">
         <div class="loading-bar"></div>
@@ -22,12 +27,41 @@
         <a class="dismiss">🗙</a>
     </div>
 
+    <!-- 🚀 Blazor Framework -->
     <script src="_content/Microsoft.AspNetCore.Components.WebAssembly.Authentication/AuthenticationService.js"></script>
     <script src="_framework/blazor.webassembly.js"></script>
+
+    <!-- 📂 Librerías Personalizadas -->
     <script src="_content/BlazingPizza.ComponentsLibrary/localStorage.js"></script>
     <script src="_content/BlazingPizza.ComponentsLibrary/pushNotifications.js"></script>
     <script src="_content/BlazingPizza.ComponentsLibrary/deliveryMap.js"></script>
     <script src="_content/BlazingPizza.ComponentsLibrary/leaflet/leaflet.js"></script>
-    <script>navigator.serviceWorker.register('service-worker.js');</script>
+
+    <!-- 🚀 Service Worker -->
+    <script>
+        navigator.serviceWorker.register('service-worker.js');
+    </script>
+
+    <!-- 🎨 Script para cambiar tema (Modo Daltonismo) -->
+    <script>
+        // Añadir o quitar el CSS complementario
+        window.switchTheme = (theme) => {
+            const link = document.getElementById('daltonico-stylesheet');
+            if (theme === 'daltonico') {
+                link.disabled = false;
+            } else {
+                link.disabled = true;
+            }
+            localStorage.setItem('theme', theme);
+        };
+
+        // Cargar el tema guardado desde localStorage
+        window.onload = () => {
+            const savedTheme = localStorage.getItem('theme') || 'normal';
+            window.switchTheme(savedTheme);
+        };
+    </script>
 </body>
+
 </html>
+
